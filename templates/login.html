@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body_contents %}
+
+
+
+
+
+  </div>
+</nav>
+
+<div class = "container-fluid">
+
+	<div class = "row">
+		<div class = "col-lg-8"></div>
+		<div class = "col-lg-4">
+			<form class ="form-signin" method="POST" action="login">
+				 <h2 class="form-signin-heading">Please sign in</h2>
+				{{ error }}
+				<label for="inputEmail" class="sr-only">Email address</label>
+				<input name="login" class = "form-control" placeholder="zID">
+				<label for="inputPassword" class="sr-only">Password</label>
+				<input type="password" name="password" class="form-control" placeholder="Password" required>
+				<button class="btn btn-lg btn-primary btn-block" type="submit" value="login">Login</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

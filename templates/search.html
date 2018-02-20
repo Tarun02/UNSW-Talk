@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block body_contents %}
+	<div class="collapse navbar-collapse" id="myNavbar">
+      
+          <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{url_for('profile',name = e)}}"><span class="glyphicon glyphicon-user"></span>Home</a></li>
+			</ul>       
+        
+      
+    </div>
+  </div>
+</nav>
+
+<h3>Search Results</h3>
+
+<div class="container">   
+	<div class="row">
+		<div class="col-md-3 well">
+			{% for r in results %}
+			<p>
+				<a href = "{{url_for('just_profile',zid = r)}}"><img src ="{{results[r][1]}}" height="80" width="80" class="thumbnail_image">{{results[r][0]}}</a>
+			</p>
+			{% endfor %}
+		</div>
+		<div class="col-md-6 pull-right well">
+			{% for p in post_search %}
+					<p>{{p}}:<p>
+					<p>{{post_search[p]|safe}}</p>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+			
+			
+		
+
+<form method="POST" action="login">>
+<input type="submit" value="Logout" >
+</form>
+
+{% endblock %}

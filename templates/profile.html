@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block body_contents %}
+
+
+    <div class="collapse navbar-collapse" id="myNavbar">
+		{% if rp==1 %}
+      <form method="POST" class="navbar-form navbar-right" action="{{url_for('search')}}" role="search">
+        <div class="form-group input-group">
+          <input type="text" class="form-control" name="name_search" placeholder="Search..">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+          </span>        
+        </div>
+      </form>
+		{% else %}
+			  <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{url_for('profile',name = e)}}"><span class="glyphicon glyphicon-user"></span> Home</a></li>
+			</ul> 
+		{% endif %}
+    </div>
+  </div>
+</nav>
+
+<div class="container">    
+  <div class="row">
+	<div class="clearfix"></div>
+    <div class="col-md-3 well">
+      <div class="well">
+        <img src="{{image}}" height="200" width="200" alt="No image">
+      </div>
+	</div>
+	<div class="clearfix visible-md"></div>
+	<div class = "col-md-3 well">
+		<div class="well">
+		
+			<p>Name:</p>
+			<p>{{profile['Name']}}</p>
+			<p>Birthday:</p>
+			<p>{{profile['D.O.B']}}</p>
+			<p>Home suburb:</p>
+			<p>{{profile['Suburb']}}</p>
+		
+		</div>
+	</div>
+	<div class="col-md-6 well">
+			<div class="row">
+				<div class="col-md-12">
+					<p>About me:</p>
+					<p>{{profile['About me']}}</p>
+				</div >
+			</div>
+	</div>
+	<div class="row">
+		<div class="clearfix"></div>
+		<div class="col-md-3 well">
+			<div class="well">
+				<h3>Friends:</h3>
+					{%for f in friends%}
+						<p><a href = "{{url_for('just_profile',zid = f)}}"><img src ="{{results[f]['img']}}" height="80" width="80">{{results[f]['Name']}} </a></p>	
+					{%endfor%}
+			</div>
+			
+				{%for f in f_r%}
+				<h3>Friend Requests:</h3>
+				<div class="well">
+				
+						<p><a href = "{{url_for('just_profile',zid = f)}}"><img src ="{{results[f]['img']}}" height="80" width="80">{{results[f]['Name']}}</a></p>	
+						<form id="form1" method="POST" action="{{url_for('add_friend',a_f=f)}}">
+							<input type="hidden" name="req" value="accept"  >
+						</form>
+						<form id="form2" method="POST" action="{{url_for('cancel_friend',c_f=f)}}">
+							<input type="hidden" name="req" value="cancel"  >
+						</form>
+						<div class="btn-group">
+							<button type="submit" form="form1" class="btn btn-primary">Accept</button>
+							<button type="submit"  form="form2" class="btn btn-primary">Cancel</button>
+						</div>
+					<p> </p> 	
+				</div>
+				{%endfor%}
+			
+		</div>
+		<div class="clearfix visible-md"></div>
+		<div class="col-md-9 well">
+			<div class="row">
+				<div class="col-sm-12">
+					 <form method="POST" action="{{url_for('make_posts')}}">
+						<div class="form-group">
+							<label for="inputlg">Post a message:</label>
+							<input class="form-control input-lg" rows="3" id="inputlg" type="text" name="message">
+							<button type="submit" class="btn btn-primary btn-sm" >Post</button>
+						</div>
+					</form> 
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="well">
+						<h3>Posts:</h3>
+							{% for m in messages %}
+								<div class="row">
+									<div class="col-md-12">
+										<div class="well">
+										<p>{{results[m[1][1]]['Name']}}:</p>
+										<p>{{m[1][0]|safe}}</p>
+										
+										<a href="#{{m[0]}}" class="btn btn-info pull-right" data-toggle="collapse">Comments</a>
+										<div id="{{m[0]}}" class="collapse">
+										<form method="POST" action="{{url_for('make_posts')}}">
+											<div class="form-group">
+												<input class="form-control input-lg" rows="3" type="text" name="comment">
+												<button type="submit" class="btn btn-sm" >Comment</button>
+											</div>
+										</form>
+											
+										{% if m|length > 2 %}
+											<div class="row">
+												<div class="col-md-12">
+													{% for i in range(2,m|length) %}
+														<div class="well">
+														<p>{{results[m[i][1][1]]['Name']}}:</p>
+														<p>{{m[i][1][0]|safe}}</p>
+														<a href="#{{m[i][0]}}" class="btn btn-info pull-right" data-toggle="collapse">Replies</a>
+														<form method="POST" action="profile{{e}}">
+															<div class="form-group">
+																<input class="form-control input-lg" rows="3" type="text" name="reply">
+																<button type="submit" class="btn btn-sm" >Reply</button>
+															</div>
+														</form> 
+														<div id="{{m[i][0]}}" class="collapse">
+														{% if m[i]|length>2 %}
+															{% for j in range(2,m[i]|length) %}
+																<div class="well">
+																<p>{{results[m[i][j][1]]['Name']}}:</p>
+																<p>{{m[i][j][0]|safe}}</p>
+																</div>
+															{% endfor %}
+														{% endif %}
+														</div>
+														</div>
+													{% endfor %}
+												</div>
+											</div>
+										{% endif %}
+										</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+
+
+
+<form method="POST" action="login">
+	<p><input type="submit" value="Logout" ></p>
+</form>
+
+{% endblock %}
